@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ElectronicsStoreApi.DAL;
 using Microsoft.EntityFrameworkCore;
+using ElectronicsStoreApi.Repositories;
 
 namespace ElectronicsStoreApi
 {
@@ -34,6 +35,8 @@ namespace ElectronicsStoreApi
 
             services.AddDbContext<StoreDataContext>(opts =>
                 opts.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddScoped<IProductRepository, ProductRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
