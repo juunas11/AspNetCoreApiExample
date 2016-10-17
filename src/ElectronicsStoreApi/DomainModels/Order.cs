@@ -22,7 +22,6 @@ namespace ElectronicsStoreApi.DomainModels
 
         public Order()
         {
-            Rows = new List<OrderRow>();
         }
     }
 }
