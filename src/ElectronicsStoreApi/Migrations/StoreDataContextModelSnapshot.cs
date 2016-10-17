@@ -42,7 +42,8 @@ namespace ElectronicsStoreApi.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<long?>("OrderId");
+                    b.Property<long?>("OrderId")
+                        .IsRequired();
 
                     b.Property<long?>("ProductId")
                         .IsRequired();
@@ -83,9 +84,10 @@ namespace ElectronicsStoreApi.Migrations
 
             modelBuilder.Entity("ElectronicsStoreApi.DomainModels.OrderRow", b =>
                 {
-                    b.HasOne("ElectronicsStoreApi.DomainModels.Order")
+                    b.HasOne("ElectronicsStoreApi.DomainModels.Order", "Order")
                         .WithMany("Rows")
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("ElectronicsStoreApi.DomainModels.Product", "Product")
                         .WithMany()

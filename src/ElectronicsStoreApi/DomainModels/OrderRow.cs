@@ -16,5 +16,10 @@ namespace ElectronicsStoreApi.DomainModels
         [ForeignKey("Product")]
         public long? ProductId { get; set; }
         public virtual Product Product { get; set; }
+
+        [Required]
+        [ForeignKey("Order")]
+        public long? OrderId { get; set; }
+        public virtual Order Order { get; set; }
     }
 }

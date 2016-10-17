@@ -46,7 +46,7 @@ namespace ElectronicsStoreApi.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    OrderId = table.Column<long>(nullable: true),
+                    OrderId = table.Column<long>(nullable: false),
                     ProductId = table.Column<long>(nullable: false),
                     Quantity = table.Column<int>(nullable: false),
                     SingleProductPrice = table.Column<decimal>(nullable: false)
@@ -59,7 +59,7 @@ namespace ElectronicsStoreApi.Migrations
                         column: x => x.OrderId,
                         principalTable: "Orders",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_OrderRow_Products_ProductId",
                         column: x => x.ProductId,
