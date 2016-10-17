@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using ElectronicsStoreApi.DAL;
+using Microsoft.EntityFrameworkCore;
 
 namespace ElectronicsStoreApi
 {
@@ -29,6 +31,9 @@ namespace ElectronicsStoreApi
         {
             // Add framework services.
             services.AddMvc();
+
+            services.AddDbContext<StoreDataContext>(opts =>
+                opts.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
