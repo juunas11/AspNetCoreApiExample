@@ -41,7 +41,7 @@ namespace ElectronicsStoreApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderRow",
+                name: "OrderRows",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
@@ -53,15 +53,15 @@ namespace ElectronicsStoreApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderRow", x => x.Id);
+                    table.PrimaryKey("PK_OrderRows", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrderRow_Orders_OrderId",
+                        name: "FK_OrderRows_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OrderRow_Products_ProductId",
+                        name: "FK_OrderRows_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
@@ -69,20 +69,20 @@ namespace ElectronicsStoreApi.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderRow_OrderId",
-                table: "OrderRow",
+                name: "IX_OrderRows_OrderId",
+                table: "OrderRows",
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderRow_ProductId",
-                table: "OrderRow",
+                name: "IX_OrderRows_ProductId",
+                table: "OrderRows",
                 column: "ProductId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "OrderRow");
+                name: "OrderRows");
 
             migrationBuilder.DropTable(
                 name: "Orders");

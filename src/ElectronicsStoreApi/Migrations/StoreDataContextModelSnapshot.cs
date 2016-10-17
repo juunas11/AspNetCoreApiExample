@@ -60,7 +60,7 @@ namespace ElectronicsStoreApi.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderRow");
+                    b.ToTable("OrderRows");
                 });
 
             modelBuilder.Entity("ElectronicsStoreApi.DomainModels.Product", b =>
