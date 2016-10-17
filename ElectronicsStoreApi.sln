@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1F8F414D-2189-4A97-993D-71CADD5E53E2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC06E76-D3D6-411B-BA54-CAB2F73EF309}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ElectronicsStoreApi", "src\ElectronicsStoreApi\ElectronicsStoreApi.xproj", "{FAF6311A-C40D-4453-84D2-8049DD14F999}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FAF6311A-C40D-4453-84D2-8049DD14F999}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAF6311A-C40D-4453-84D2-8049DD14F999}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAF6311A-C40D-4453-84D2-8049DD14F999}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAF6311A-C40D-4453-84D2-8049DD14F999}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FAF6311A-C40D-4453-84D2-8049DD14F999} = {1F8F414D-2189-4A97-993D-71CADD5E53E2}
+	EndGlobalSection
+EndGlobal
