@@ -75,5 +75,85 @@ namespace ElectronicsStoreApi.Controllers
             _orders.DeleteOrder(id);
             return Ok();
         }
+
+        [HttpGet("{id}/rows")]
+        public IActionResult GetRows(long id)
+        {
+            List<OrderRow> rows = _orders.GetRowsForOrder(id);
+            if(rows == null)
+            {
+                return NotFound();
+            }
+            return Ok(rows);
+        }
+
+        [HttpPost("{id}/rows")]
+        public IActionResult AddRow(long id, [FromBody] OrderRow row)
+        {
+            if(ModelState.IsValid == false)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                OrderRow createdRow = _orders.AddRowToOrder(id, row);
+
+                return CreatedAtAction(
+                    nameof(GetRow), new { orderId = id, rowId = createdRow.Id }, createdRow);
+            }
+            catch (EntityNotFoundException<Order>)
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpGet("{orderId}/rows/{rowId}")]
+        public IActionResult GetRow(long orderId, long rowId)
+        {
+            OrderRow row = _orders.GetRowInOrder(orderId, rowId);
+            if(row == null)
+            {
+                return NotFound();
+            }
+            return Ok(row);
+        }
+
+        [HttpPut("{orderId}/rows/{rowId}")]
+        public IActionResult UpdateRow(long orderId, long rowId, [FromBody] OrderRow row)
+        {
+            if(ModelState.IsValid == false)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                _orders.UpdateRowInOrder(orderId, rowId, row);
+                return Ok();
+            }
+            catch (EntityNotFoundException<OrderRow>)
+            {
+                return NotFound();
+            }
+            catch (EntityNotFoundException<Order>)
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpDelete("{orderId}/rows/{rowId}")]
+        public IActionResult DeleteRow(long orderId, long rowId)
+        {
+            try
+            {
+                _orders.DeleteRowFromOrder(orderId, rowId);
+                return Ok();
+            }
+            catch (EntityNotFoundException<Order>)
+            {
+                //If the order is not found, return 404
+                return NotFound();
+            }
+        }
     }
 }
