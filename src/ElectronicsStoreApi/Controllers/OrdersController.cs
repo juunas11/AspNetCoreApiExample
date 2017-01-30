@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ElectronicsStoreApi.Hateoas;
 
 namespace ElectronicsStoreApi.Controllers
 {
@@ -22,7 +23,9 @@ namespace ElectronicsStoreApi.Controllers
         public IActionResult GetAllOrders()
         {
             List<Order> orders = _orders.GetAllOrders();
-            return Ok(orders);
+            var wrapper=  new LinkWrapper(orders);
+            wrapper.Links.Add(new LinkValue("create", Url.Action(nameof(CreateOrder), "Orders", null, Request.Scheme)));
+            return Ok(wrapper);
         }
 
         [HttpGet("{id}")]
@@ -33,7 +36,13 @@ namespace ElectronicsStoreApi.Controllers
             {
                 return NotFound();
             }
-            return Ok(order);
+            var wrapper = new LinkWrapper(order);
+            wrapper.Links.Add(new LinkValue("self", Url.Action(nameof(GetOrder), "Orders", new {id}, Request.Scheme)));
+            wrapper.Links.Add(new LinkValue("rows", Url.Action(nameof(GetRows), "Orders", new {id}, Request.Scheme)));
+            wrapper.Links.Add(new LinkValue("edit", Url.Action(nameof(UpdateOrder), "Orders", new {id}, Request.Scheme)));
+            wrapper.Links.Add(new LinkValue("delete", Url.Action(nameof(DeleteOrder), "Orders", new {id}, Request.Scheme)));
+
+            return Ok(wrapper);
         }
 
         [HttpPost]
