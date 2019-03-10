@@ -1,5 +1,0 @@
-﻿{
-  "ConnectionStrings": {
-    "DefaultConnection": "Data Source=.;Initial Catalog=ElectronicsStoreDevDb;Integrated Security=True"
-  }
-}

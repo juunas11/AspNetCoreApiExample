@@ -1,10 +1,9 @@
-﻿using System;
+﻿using ElectronicsStoreApi.DAL;
+using ElectronicsStoreApi.DomainModels;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using ElectronicsStoreApi.DomainModels;
-using ElectronicsStoreApi.DAL;
-using Microsoft.EntityFrameworkCore;
 
 namespace ElectronicsStoreApi.Repositories
 {
@@ -19,7 +18,7 @@ namespace ElectronicsStoreApi.Repositories
 
         public OrderRow AddRowToOrder(long id, OrderRow row)
         {
-            if(OrderExists(id) == false)
+            if (OrderExists(id) == false)
             {
                 throw new EntityNotFoundException<Order>(id);
             }
@@ -43,7 +42,7 @@ namespace ElectronicsStoreApi.Repositories
         public void DeleteOrder(long id)
         {
             Order order = GetOrder(id);
-            if(order != null)
+            if (order != null)
             {
                 _db.Orders.Remove(order);
                 _db.SaveChanges();
@@ -52,13 +51,13 @@ namespace ElectronicsStoreApi.Repositories
 
         public void DeleteRowFromOrder(long orderId, long rowId)
         {
-            if(OrderExists(orderId) == false)
+            if (OrderExists(orderId) == false)
             {
                 throw new EntityNotFoundException<Order>(orderId);
             }
 
             OrderRow row = GetRowInOrder(orderId, rowId);
-            if(row != null)
+            if (row != null)
             {
                 _db.OrderRows.Remove(row);
                 _db.SaveChanges();
@@ -83,7 +82,7 @@ namespace ElectronicsStoreApi.Repositories
         public List<OrderRow> GetRowsForOrder(long id)
         {
             //Detect non-existing order
-            if(OrderExists(id) == false)
+            if (OrderExists(id) == false)
             {
                 return null;
             }
@@ -96,7 +95,7 @@ namespace ElectronicsStoreApi.Repositories
         public void UpdateOrder(long id, Order updatedOrder)
         {
             Order order = GetOrder(id);
-            if(order == null)
+            if (order == null)
             {
                 throw new EntityNotFoundException<Order>(id);
             }
@@ -116,7 +115,7 @@ namespace ElectronicsStoreApi.Repositories
             }
 
             OrderRow row = GetRowInOrder(orderId, rowId);
-            if(row == null)
+            if (row == null)
             {
                 throw new EntityNotFoundException<OrderRow>(rowId);
             }
