@@ -1,4 +1,5 @@
-﻿using ElectronicsStoreApi.DAL;
+﻿using ElectronicsStoreApi.ApiModels;
+using ElectronicsStoreApi.DAL;
 using ElectronicsStoreApi.DomainModels;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -17,32 +18,38 @@ namespace ElectronicsStoreApi.Repositories
             _db = db;
         }
 
-        public async Task<OrderRow> AddRowToOrder(long id, OrderRow row)
+        public async Task<OrderRowModel> AddRowToOrder(long id, OrderRowModel model)
         {
             if (await OrderExists(id) == false)
             {
-                throw new EntityNotFoundException<Order>(id);
+                throw new EntityNotFoundException<OrderModel>(id);
             }
+
+            var row = new OrderRow();
+            model.MapTo(row);
 
             row.OrderId = id;
             await _db.OrderRows.AddAsync(row);
             await _db.SaveChangesAsync();
 
-            return row;
+            return row.MapToDto();
         }
 
-        public async Task<Order> CreateOrder(Order order)
+        public async Task<OrderModel> CreateOrder(OrderModel model)
         {
+            var order = new Order();
+            model.MapTo(order);
+
             order.CreatedAt = DateTimeOffset.Now;
 
             await _db.Orders.AddAsync(order);
             await _db.SaveChangesAsync();
-            return order;
+            return order.MapToDto();
         }
 
         public async Task DeleteOrder(long id)
         {
-            Order order = await GetOrder(id);
+            Order order = await _db.Orders.FirstOrDefaultAsync(o => o.Id == id);
             if (order != null)
             {
                 _db.Orders.Remove(order);
@@ -54,10 +61,10 @@ namespace ElectronicsStoreApi.Repositories
         {
             if (await OrderExists(orderId) == false)
             {
-                throw new EntityNotFoundException<Order>(orderId);
+                throw new EntityNotFoundException<OrderModel>(orderId);
             }
 
-            OrderRow row = await GetRowInOrder(orderId, rowId);
+            OrderRow row = await _db.OrderRows.FirstOrDefaultAsync(r => r.OrderId == orderId && r.Id == rowId);
             if (row != null)
             {
                 _db.OrderRows.Remove(row);
@@ -65,22 +72,24 @@ namespace ElectronicsStoreApi.Repositories
             }
         }
 
-        public async Task<List<Order>> GetAllOrders()
+        public async Task<List<OrderModel>> GetAllOrders()
         {
-            return await _db.Orders.AsNoTracking().ToListAsync();
+            return (await _db.Orders.AsNoTracking().ToListAsync())
+                .Select(o => o.MapToDto())
+                .ToList();
         }
 
-        public async Task<Order> GetOrder(long id)
+        public async Task<OrderModel> GetOrder(long id)
         {
-            return await _db.Orders.FirstOrDefaultAsync(o => o.Id == id);
+            return (await _db.Orders.FirstOrDefaultAsync(o => o.Id == id))?.MapToDto();
         }
 
-        public async Task<OrderRow> GetRowInOrder(long orderId, long rowId)
+        public async Task<OrderRowModel> GetRowInOrder(long orderId, long rowId)
         {
-            return await _db.OrderRows.FirstOrDefaultAsync(r => r.OrderId == orderId && r.Id == rowId);
+            return (await _db.OrderRows.FirstOrDefaultAsync(r => r.OrderId == orderId && r.Id == rowId))?.MapToDto();
         }
 
-        public async Task<List<OrderRow>> GetRowsForOrder(long id)
+        public async Task<List<OrderRowModel>> GetRowsForOrder(long id)
         {
             // Detect non-existing order
             if (await OrderExists(id) == false)
@@ -88,43 +97,39 @@ namespace ElectronicsStoreApi.Repositories
                 return null;
             }
 
-            return await _db.OrderRows.AsNoTracking()
+            return (await _db.OrderRows.AsNoTracking()
                 .Where(r => r.OrderId == id)
-                .ToListAsync();
+                .ToListAsync())
+                    .Select(r => r.MapToDto())
+                    .ToList();
         }
 
-        public async Task UpdateOrder(long id, Order updatedOrder)
+        public async Task UpdateOrder(long id, OrderModel updatedOrder)
         {
-            Order order = await GetOrder(id);
+            Order order = await _db.Orders.FirstOrDefaultAsync(o => o.Id == id);
             if (order == null)
             {
-                throw new EntityNotFoundException<Order>(id);
+                throw new EntityNotFoundException<OrderModel>(id);
             }
 
-            order.CustomerName = updatedOrder.CustomerName;
-            order.CustomerAddress = updatedOrder.CustomerAddress;
-            order.CustomerEmail = updatedOrder.CustomerEmail;
-
+            updatedOrder.MapTo(order);
             await _db.SaveChangesAsync();
         }
 
-        public async Task UpdateRowInOrder(long orderId, long rowId, OrderRow updatedRow)
+        public async Task UpdateRowInOrder(long orderId, long rowId, OrderRowModel updatedRow)
         {
             if (await OrderExists(orderId) == false)
             {
-                throw new EntityNotFoundException<Order>(orderId);
+                throw new EntityNotFoundException<OrderModel>(orderId);
             }
 
-            OrderRow row = await GetRowInOrder(orderId, rowId);
+            OrderRow row = await _db.OrderRows.FirstOrDefaultAsync(r => r.OrderId == orderId && r.Id == rowId);
             if (row == null)
             {
-                throw new EntityNotFoundException<OrderRow>(rowId);
+                throw new EntityNotFoundException<OrderRowModel>(rowId);
             }
 
-            row.ProductId = updatedRow.ProductId;
-            row.Quantity = updatedRow.Quantity;
-            row.SingleProductPrice = updatedRow.SingleProductPrice;
-
+            updatedRow.MapTo(row);
             await _db.SaveChangesAsync();
         }
 

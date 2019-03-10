@@ -5,6 +5,7 @@ using ElectronicsStoreApi.DAL;
 using Microsoft.EntityFrameworkCore;
 using ElectronicsStoreApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace ElectronicsStoreApi
 {
@@ -26,11 +27,26 @@ namespace ElectronicsStoreApi
 
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
+
+            services.AddSwaggerGen(o =>
+            {
+                o.SwaggerDoc("electronics-store-api", new Info
+                {
+                    Title = "Electronics Store API",
+                    Description = "Sample API"
+                });
+            });
         }
 
         public void Configure(IApplicationBuilder app)
         {
             app.UseMvc();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(o =>
+            {
+                o.SwaggerEndpoint("/swagger/electronics-store-api/swagger.json", "Electronics Store API");
+            });
         }
     }
 }
