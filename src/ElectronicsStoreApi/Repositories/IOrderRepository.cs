@@ -1,19 +1,20 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ElectronicsStoreApi.DomainModels;
 
 namespace ElectronicsStoreApi.Repositories
 {
     public interface IOrderRepository
     {
-        List<Order> GetAllOrders();
-        Order GetOrder(long id);
-        Order CreateOrder(Order order);
-        void UpdateOrder(long id, Order updatedOrder);
-        void DeleteOrder(long id);
-        List<OrderRow> GetRowsForOrder(long id);
-        OrderRow AddRowToOrder(long id, OrderRow row);
-        OrderRow GetRowInOrder(long orderId, long rowId);
-        void UpdateRowInOrder(long orderId, long rowId, OrderRow updatedRow);
-        void DeleteRowFromOrder(long orderId, long rowId);
+        Task<List<Order>> GetAllOrders();
+        Task<Order> GetOrder(long id);
+        Task<Order> CreateOrder(Order order);
+        Task UpdateOrder(long id, Order updatedOrder);
+        Task DeleteOrder(long id);
+        Task<List<OrderRow>> GetRowsForOrder(long id);
+        Task<OrderRow> AddRowToOrder(long id, OrderRow row);
+        Task<OrderRow> GetRowInOrder(long orderId, long rowId);
+        Task UpdateRowInOrder(long orderId, long rowId, OrderRow updatedRow);
+        Task DeleteRowFromOrder(long orderId, long rowId);
     }
 }

@@ -2,6 +2,7 @@
 using ElectronicsStoreApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ElectronicsStoreApi.Controllers
 {
@@ -16,49 +17,50 @@ namespace ElectronicsStoreApi.Controllers
         }
 
         [HttpGet("")]
-        public IActionResult GetAllProducts()
+        public async Task<IActionResult> GetAllProducts()
         {
-            List<Product> products = _products.GetAllProducts();
+            List<Product> products = await _products.GetAllProducts();
             return Ok(products);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetProduct(long id)
+        public async Task<IActionResult> GetProduct(long id)
         {
-            Product product = _products.GetProduct(id);
-            if(product == null)
+            Product product = await _products.GetProduct(id);
+            if (product == null)
             {
                 return NotFound();
             }
+
             return Ok(product);
         }
 
         [HttpPost]
-        public IActionResult CreateProduct([FromBody] Product product)
+        public async Task<IActionResult> CreateProduct([FromBody] Product product)
         {
-            if(ModelState.IsValid == false)
+            if (ModelState.IsValid == false)
             {
                 return BadRequest(ModelState);
             }
 
-            Product createdProduct = _products.CreateProduct(product);
+            Product createdProduct = await _products.CreateProduct(product);
 
             return CreatedAtAction(
                 nameof(GetProduct), new { id = createdProduct.Id }, createdProduct);
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateProduct(long id, [FromBody] Product product)
+        public async Task<IActionResult> UpdateProduct(long id, [FromBody] Product product)
         {
-            if(ModelState.IsValid == false)
+            if (ModelState.IsValid == false)
             {
                 return BadRequest(ModelState);
             }
 
             try
             {
-                _products.UpdateProduct(id, product);
-                return Ok();
+                await _products.UpdateProduct(id, product);
+                return NoContent();
             }
             catch (EntityNotFoundException<Product>)
             {
@@ -67,10 +69,10 @@ namespace ElectronicsStoreApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteProduct(long id)
+        public async Task<IActionResult> DeleteProduct(long id)
         {
-            _products.DeleteProduct(id);
-            return Ok();
+            await _products.DeleteProduct(id);
+            return NoContent();
         }
     }
 }
